@@ -2,678 +2,186 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#06143d">
-<title>GenU Knowledge Library</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GenU YPAT Global Dashboard</title>
 <style>
 :root {
-  --navy: #06143d;
-  --blue: #0b2864;
-  --bright-blue: #2389e8;
-  --ice: #d9efff;
-  --text: #17243b;
-  --muted: #718096;
-  --surface: #ffffff;
-  --background: #f4f7fb;
+  /* GenU Branding Colors */
+  --genu-navy: #001a4d; /* Deep background blue */
+  --genu-blue: #0b2e7a; /* Lighter card blue */
+  --genu-cyan: #00aeef; /* GenU accent color */
+  --genu-white: #ffffff;
+  --text-muted: #b0c4de;
+  --line: rgba(255, 255, 255, 0.15);
+  --shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: Inter, "Segoe UI", Arial, sans-serif;
-  background: var(--background);
-  color: var(--text);
+  color: var(--genu-white);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* The blue now covers the whole background */
+  background: linear-gradient(135deg, var(--genu-navy) 0%, #001133 100%);
+  background-attachment: fixed;
   min-height: 100vh;
 }
 
-/* OPENING */
-
+/* HERO SECTION */
 .hero {
-  position: relative;
-  min-height: 390px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 60px 24px 40px;
   text-align: center;
-  padding: 75px 24px 115px;
-  color: white;
-  background:
-    radial-gradient(ellipse at 48% 72%, #1265b8 0%, transparent 35%),
-    radial-gradient(ellipse at 75% 35%, #102e79 0%, transparent 45%),
-    linear-gradient(145deg, #02082b 0%, #07194f 48%, #020725 100%);
+  border-bottom: 1px solid var(--line);
 }
-
-.stars {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    radial-gradient(1px 1px at 8% 20%, #fff 99%, transparent),
-    radial-gradient(1px 1px at 18% 48%, #b9e5ff 99%, transparent),
-    radial-gradient(2px 2px at 31% 16%, #fff 99%, transparent),
-    radial-gradient(1px 1px at 43% 35%, #fff 99%, transparent),
-    radial-gradient(2px 2px at 57% 13%, #d8f2ff 99%, transparent),
-    radial-gradient(1px 1px at 68% 42%, #fff 99%, transparent),
-    radial-gradient(1px 1px at 79% 18%, #fff 99%, transparent),
-    radial-gradient(2px 2px at 91% 31%, #b9e5ff 99%, transparent),
-    radial-gradient(1px 1px at 95% 65%, #fff 99%, transparent),
-    radial-gradient(1px 1px at 24% 68%, #fff 99%, transparent);
-  opacity: .7;
-}
-
-.hero-content {
-  position: relative;
-  z-index: 2;
-  max-width: 760px;
-}
-
-.eyebrow {
-  color: #9dd9ff;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  margin-bottom: 22px;
-}
-
 .hero h1 {
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: 400;
-  font-size: clamp(38px, 6vw, 65px);
-  letter-spacing: -1.5px;
-  margin-bottom: 18px;
-}
-
-.hero .slogan {
-  color: #d6eaff;
-  font-size: clamp(14px, 2vw, 18px);
-  letter-spacing: .5px;
-  line-height: 1.7;
-}
-
-.hero .subline {
-  color: #9bb8d9;
-  font-size: 12px;
-  margin-top: 18px;
-  letter-spacing: 1px;
-}
-
-/* MOUNTAIN SILHOUETTES */
-
-.mountains {
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 100%;
-  height: 145px;
-  z-index: 1;
-}
-
-.mountains svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-/* MAIN CONTENT */
-
-main {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 48px 26px 80px;
-}
-
-.intro {
-  text-align: center;
-  margin-bottom: 35px;
-}
-
-.intro h2 {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 27px;
-  font-weight: 400;
-  color: #14264a;
-  margin-bottom: 9px;
-}
-
-.intro p {
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-/* SEARCH */
-
-.search-wrap {
-  max-width: 620px;
-  margin: 0 auto 42px;
-  position: relative;
-}
-
-.search-wrap input {
-  width: 100%;
-  padding: 17px 20px 17px 52px;
-  border: 1px solid #dce5f0;
-  border-radius: 12px;
-  background: white;
-  font-size: 14px;
-  color: var(--text);
-  outline: none;
-  box-shadow: 0 5px 20px rgba(16, 39, 77, .04);
-  transition: border .2s, box-shadow .2s;
-}
-
-.search-wrap input:focus {
-  border-color: #4c9ee8;
-  box-shadow: 0 0 0 3px rgba(76, 158, 232, .12);
-}
-
-.search-icon {
-  position: absolute;
-  left: 19px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #8092aa;
-  font-size: 19px;
-}
-
-/* SHELVES */
-
-.shelf-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 17px;
-}
-
-.shelf {
-  background: var(--surface);
-  border: 1px solid #e7edf5;
-  border-radius: 13px;
-  padding: 25px 23px;
-  min-height: 175px;
-  text-align: left;
-  cursor: pointer;
-  transition: transform .2s, box-shadow .2s, border .2s;
-}
-
-.shelf:hover {
-  transform: translateY(-4px);
-  border-color: #b7d8f5;
-  box-shadow: 0 12px 28px rgba(18, 49, 91, .08);
-}
-
-.shelf.active {
-  border-color: #3289d8;
-  box-shadow: 0 0 0 2px rgba(50, 137, 216, .10);
-}
-
-.shelf-icon {
-  width: 43px;
-  height: 43px;
-  border-radius: 11px;
-  background: #edf5ff;
-  color: #2169ad;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 21px;
-  margin-bottom: 19px;
-}
-
-.shelf h3 {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 19px;
-  font-weight: 400;
-  color: #172b50;
-  margin-bottom: 8px;
-}
-
-.shelf p {
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-.shelf[hidden] {
-  display: none;
-}
-
-/* RESOURCE PANEL */
-
-.resource-panel {
-  display: none;
-  margin-top: 36px;
-  padding: 30px;
-  border: 1px solid #e5ebf3;
-  border-radius: 14px;
-  background: white;
-}
-
-.resource-panel.visible {
-  display: block;
-}
-
-.resource-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.resource-heading h2 {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 23px;
-  font-weight: 400;
-  color: #172b50;
-}
-
-.close-button {
-  border: none;
-  background: #edf3fa;
-  color: #3d5a7b;
-  border-radius: 8px;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 12px;
-}
-
-.empty-state {
-  padding: 38px 15px;
-  text-align: center;
-  background: #f7faff;
-  border: 1px dashed #d6e2ef;
-  border-radius: 10px;
-}
-
-.empty-state .symbol {
-  font-size: 28px;
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 700;
   margin-bottom: 12px;
 }
-
-.empty-state h3 {
-  color: #203b63;
-  font-size: 15px;
+.hero .subtitle {
+  color: var(--genu-cyan);
+  font-size: clamp(16px, 2vw, 24px);
+  margin-bottom: 24px;
   font-weight: 600;
-  margin-bottom: 8px;
 }
 
-.empty-state p {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.7;
+/* LIBRARY SECTION */
+.library {
+  max-width: 1400px;
+  margin: auto;
+  padding: 40px 24px;
 }
 
-/* RESOURCES - READY FOR FUTURE PDFS */
+.sectionhead h2 {
+  font-size: 28px;
+  margin-bottom: 24px;
+  color: var(--genu-white);
+}
 
-.resource-list {
+/* SHELF CARDS (Regions/Profiles) */
+.grid {
   display: grid;
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
 }
 
-.resource-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  padding: 16px;
-  border: 1px solid #e8eef5;
-  border-radius: 10px;
+.card {
+  background: var(--genu-blue);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.resource-card h3 {
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0,174,239,0.2);
+}
+
+/* The image container for the shelves */
+.card-img-wrap {
+  height: 180px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .card-img-wrap img {
+  transform: scale(1.05);
+}
+
+.cardcopy {
+  padding: 20px;
+}
+
+.card h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: var(--genu-white);
+}
+
+.card p {
   font-size: 14px;
-  margin-bottom: 5px;
+  color: var(--text-muted);
+  line-height: 1.5;
 }
 
-.resource-card p {
-  color: var(--muted);
-  font-size: 12px;
-}
+/* Custom Scrollbar for a polished look */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--genu-navy); }
+::-webkit-scrollbar-thumb { background: var(--genu-blue); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--genu-cyan); }
 
-.resource-card a {
-  color: #176bb4;
-  font-size: 12px;
-  font-weight: 600;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-/* FOOTER */
-
-footer {
-  text-align: center;
-  padding: 25px 20px;
-  color: #8a9bb0;
-  font-size: 11px;
-  letter-spacing: .5px;
-  border-top: 1px solid #e7edf4;
-  background: #fff;
-}
-
-footer strong {
-  color: #31577e;
-  font-weight: 600;
-}
-
-/* RESPONSIVE */
-
-@media (max-width: 760px) {
-  .shelf-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .hero {
-    min-height: 350px;
-  }
-}
-
-@media (max-width: 500px) {
-  main {
-    padding: 38px 17px 60px;
-  }
-
-  .shelf-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .shelf {
-    min-height: 145px;
-  }
-
-  .resource-panel {
-    padding: 20px;
-  }
-
-  .mountains {
-    height: 105px;
-  }
-}
 </style>
 </head>
-
 <body>
 
-<header class="hero">
-  <div class="stars"></div>
+<section class="hero">
+  <h1>YPAT Global Dashboard</h1>
+  <p class="subtitle">Generation Unlimited · Young People's Action Team</p>
+</section>
 
-  <div class="hero-content">
-    <div class="eyebrow">Generation Unlimited</div>
-
-    <h1>GenU Knowledge Library</h1>
-
-    <p class="slogan">
-      A lifetime of learning.<br>
-      A youthfulness of mind.
-    </p>
-
-    <p class="subline">
-      Explore. Learn. Grow. Keep discovering.
-    </p>
+<main class="library">
+  <div class="sectionhead">
+    <h2>Youth Regions & Portfolios</h2>
   </div>
-
-  <div class="mountains">
-    <svg viewBox="0 0 1440 180" preserveAspectRatio="none"
-         xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="mountainGlow" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#174d91"/>
-          <stop offset="100%" stop-color="#06102d"/>
-        </linearGradient>
-      </defs>
-
-      <path d="M0 70 L110 62 L230 105 L340 83 L455 130
-               L570 92 L690 48 L805 100 L930 72 L1050 110
-               L1180 48 L1320 72 L1440 35 L1440 180 L0 180Z"
-            fill="url(#mountainGlow)" opacity=".85"/>
-
-      <path d="M0 115 L150 85 L275 125 L410 105 L550 150
-               L690 95 L820 128 L950 88 L1080 140
-               L1230 85 L1360 112 L1440 92 L1440 180 L0 180Z"
-            fill="#07132f"/>
-
-      <path d="M0 145 L190 122 L360 155 L530 130
-               L700 164 L870 125 L1030 157
-               L1190 125 L1350 151 L1440 135
-               L1440 180 L0 180Z"
-            fill="#03091f"/>
-    </svg>
+  
+  <div class="grid" id="grid">
+    <!-- JS will inject the cards here -->
   </div>
-</header>
-
-<main>
-
-  <section class="intro">
-    <h2>A place for curious minds</h2>
-    <p>
-      Knowledge is something we carry with us.<br>
-      Explore the library and discover something worth learning.
-    </p>
-  </section>
-
-  <div class="search-wrap">
-    <span class="search-icon">⌕</span>
-    <input
-      type="search"
-      id="librarySearch"
-      placeholder="Search the knowledge library..."
-      aria-label="Search the knowledge library"
-    >
-  </div>
-
-  <section class="shelf-grid" id="shelfGrid">
-
-    <article class="shelf" data-shelf="Book" tabindex="0">
-      <div class="shelf-icon">▤</div>
-      <h3>Book</h3>
-      <p>Books and reading material to expand your knowledge and perspective.</p>
-    </article>
-
-    <article class="shelf" data-shelf="Articles & Essays" tabindex="0">
-      <div class="shelf-icon">✎</div>
-      <h3>Articles &amp; Essays</h3>
-      <p>Ideas, research, essays and thoughtful perspectives from around the world.</p>
-    </article>
-
-    <article class="shelf" data-shelf="Exercise & Diet" tabindex="0">
-      <div class="shelf-icon">✦</div>
-      <h3>Exercise &amp; Diet</h3>
-      <p>Physical health, movement, nutrition and the foundations of well-being.</p>
-    </article>
-
-    <article class="shelf" data-shelf="Psychology and Mental Models" tabindex="0">
-      <div class="shelf-icon">◎</div>
-      <h3>Psychology &amp; Mental Models</h3>
-      <p>Understand the mind, human behaviour and better ways of thinking.</p>
-    </article>
-
-    <article class="shelf" data-shelf="Investing and Financial Literacy" tabindex="0">
-      <div class="shelf-icon">↗</div>
-      <h3>Investing &amp; Financial Literacy</h3>
-      <p>Financial knowledge, investing principles and responsible money decisions.</p>
-    </article>
-
-  </section>
-
-  <section class="resource-panel" id="resourcePanel">
-    <div class="resource-heading">
-      <h2 id="selectedShelfTitle">Shelf</h2>
-      <button class="close-button" id="closeShelf">Close ✕</button>
-    </div>
-
-    <div id="resourceContent"></div>
-  </section>
-
 </main>
 
-<footer>
-  <strong>GenU Knowledge Library</strong>
-  <span> &nbsp;|&nbsp; A shared space for lifelong learning.</span>
-</footer>
-
 <script>
-/*
-  ADD RESOURCES HERE WHEN THE LIBRARY IS POPULATED.
-
-  Example:
-
+// This is where you will insert your YPAT data
+const regions = [
   {
-    shelf: "Book",
-    title: "The Psychology of Money",
-    author: "Morgan Housel",
-    description: "An exploration of behaviour and financial decisions.",
-    file: "pdfs/psychology-of-money.pdf"
+    title: "African Region",
+    tagline: "15 YPATs representing 8 African nations.",
+    img: "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=700&q=80&fit=crop" // Replace with your image
+  },
+  {
+    title: "Asian Region",
+    tagline: "Tracking youth initiatives across Asia.",
+    img: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=700&q=80&fit=crop"
+  },
+  {
+    title: "The Americas",
+    tagline: "Latin America & Caribbean youth impact.",
+    img: "https://images.unsplash.com/photo-1518638150340-f706e86654de?w=700&q=80&fit=crop"
+  },
+  {
+    title: "Middle East & North Africa",
+    tagline: "MENA region youth initiatives.",
+    img: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=700&q=80&fit=crop"
   }
+];
 
-  Keep PDF files in a folder named "pdfs" alongside this HTML file.
-*/
+const grid = document.getElementById('grid');
 
-const resources = [];
-
-const shelfCards = document.querySelectorAll(".shelf");
-const searchInput = document.getElementById("librarySearch");
-const resourcePanel = document.getElementById("resourcePanel");
-const resourceTitle = document.getElementById("selectedShelfTitle");
-const resourceContent = document.getElementById("resourceContent");
-const closeButton = document.getElementById("closeShelf");
-
-let selectedShelf = null;
-
-function openShelf(shelfName) {
-  selectedShelf = shelfName;
-  resourceTitle.textContent = shelfName;
-
-  shelfCards.forEach(card => {
-    card.classList.toggle(
-      "active",
-      card.dataset.shelf === shelfName
-    );
-  });
-
-  renderResources(shelfName);
-  resourcePanel.classList.add("visible");
-
-  resourcePanel.scrollIntoView({
-    behavior: "smooth",
-    block: "nearest"
-  });
-}
-
-function renderResources(shelfName) {
-  const shelfResources = resources.filter(resource =>
-    resource.shelf === shelfName
-  );
-
-  if (shelfResources.length === 0) {
-    resourceContent.innerHTML = `
-      <div class="empty-state">
-        <div class="symbol">✧</div>
-        <h3>This shelf is ready to grow.</h3>
-        <p>
-          Learning resources and downloadable PDFs
-          will be added here.
-        </p>
-      </div>
-    `;
-    return;
-  }
-
-  resourceContent.innerHTML = `
-    <div class="resource-list">
-      ${shelfResources.map(resource => `
-        <article class="resource-card">
-          <div>
-            <h3>${escapeHTML(resource.title)}</h3>
-            <p>
-              ${escapeHTML(resource.author || "")}
-              ${resource.description
-                ? " · " + escapeHTML(resource.description)
-                : ""}
-            </p>
-          </div>
-          <a href="${escapeHTML(resource.file)}" download>
-            Download PDF ↓
-          </a>
-        </article>
-      `).join("")}
+regions.forEach(region => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-img-wrap">
+      <img src="${region.img}" alt="${region.title}">
+    </div>
+    <div class="cardcopy">
+      <h3>${region.title}</h3>
+      <p>${region.tagline}</p>
     </div>
   `;
-}
-
-function escapeHTML(value) {
-  return String(value).replace(/[&<>"']/g, character => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;"
-  })[character]);
-}
-
-shelfCards.forEach(card => {
-  card.addEventListener("click", () => {
-    openShelf(card.dataset.shelf);
-  });
-
-  card.addEventListener("keydown", event => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      openShelf(card.dataset.shelf);
-    }
-  });
-});
-
-searchInput.addEventListener("input", () => {
-  const query = searchInput.value.toLowerCase().trim();
-
-  shelfCards.forEach(card => {
-    const name = card.dataset.shelf.toLowerCase();
-    const description = card.querySelector("p").textContent.toLowerCase();
-
-    const matchingResources = resources.filter(resource =>
-      resource.shelf === card.dataset.shelf &&
-      [
-        resource.title,
-        resource.author,
-        resource.description
-      ].join(" ").toLowerCase().includes(query)
-    );
-
-    const matches =
-      !query ||
-      name.includes(query) ||
-      description.includes(query) ||
-      matchingResources.length > 0;
-
-    card.hidden = !matches;
-  });
-
-  if (selectedShelf) {
-    const selectedCard = [...shelfCards].find(
-      card => card.dataset.shelf === selectedShelf
-    );
-
-    if (selectedCard && selectedCard.hidden) {
-      selectedShelf = null;
-      resourcePanel.classList.remove("visible");
-      shelfCards.forEach(card => card.classList.remove("active"));
-    }
-  }
-});
-
-closeButton.addEventListener("click", () => {
-  selectedShelf = null;
-  resourcePanel.classList.remove("visible");
-  shelfCards.forEach(card => card.classList.remove("active"));
+  grid.appendChild(card);
 });
 </script>
 
 </body>
 </html>
-
