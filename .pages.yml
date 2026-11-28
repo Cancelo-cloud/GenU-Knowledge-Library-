@@ -1,1 +1,50 @@
+media:
+  - name: library-pdfs
+    label: Library PDFs
+    input: pdfs
+    output: /pdfs
+    extensions:
+      - pdf
+content:
+  - name: resources
+    label: Add Resources
+    type: file
+    path: data/resources.json
+    format: json
+    list: true
+    fields:
+      - name: shelf
+        label: Shelf
+        type: select
+        required: true
+        options:
+          values:
+            - Book
+            - Articles & Essays
+            - Exercise & Diet
+            - Psychology and Mental Models
+            - Investing and Financial Literacy
+      - name: title
+        label: Resource title
+        type: string
+        required: true
+      - name: author
+        label: Author
+        type: string
+      - name: category
+        label: Category
+        type: string
+      - name: pdf
+        label: Book / Summary PDF
+        type: file
+        options:
+          media: library-pdfs
+          extensions:
+            - pdf
+      - name: summary
+        label: Summary (up to 1,000 words)
+        type: rich-text
+        description: Use headings, paragraphs, bulleted lists, and numbered lists. Please keep the summary to 1,000 words or fewer.
+        options:
+          format: html
 
