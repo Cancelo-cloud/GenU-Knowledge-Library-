@@ -564,7 +564,7 @@ function openResource(resource) {
   document.getElementById("resourceByline").textContent = resource.author || "";
   document.getElementById("resourceDescription").innerHTML = sanitizeRichText(resource.summary || resource.description || "");
   resourceDownload.hidden = !resource.pdf;
-  resourceDownload.innerHTML = resource.pdf ? '<h2>Book / Summary</h2><a class="resource-open" href="' + escapeHTML(resource.pdf) + '" target="_blank" rel="noopener" download>Download Book / Summary PDF ↓</a>' : "";
+  resourceDownload.innerHTML = resource.pdf ? '<h2>Book / Summary</h2><a class="resource-open" href="' + escapeHTML(libraryAssetUrl(resource.pdf)) + '" target="_blank" rel="noopener" download>Download Book / Summary PDF ↓</a>' : "";
   shelfView.hidden = true; resourceDetail.hidden = false;
   backToShelf.textContent = "← Back to " + resource.shelf + " shelf";
   resourceDetail.scrollTop = 0;
@@ -584,6 +584,13 @@ function escapeHTML(value) {
     '"': "&quot;",
     "'": "&#039;"
   })[character]);
+}
+
+function libraryAssetUrl(filePath) {
+  const value = String(filePath || "").trim();
+  if (/^(https?:|data:|blob:)/i.test(value)) return value;
+  // GitHub project pages live below the repository name, so resolve uploaded files relative to the site.
+  return new URL(value.replace(/^\/+/, ""), document.baseURI).href;
 }
 
 function sanitizeRichText(markup) {
