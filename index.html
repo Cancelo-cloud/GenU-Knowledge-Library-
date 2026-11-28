@@ -581,7 +581,7 @@ const resourceDownload = document.getElementById("resourceDownload");
 let selectedShelf = null;
 
 function shelfDisplayTitle(shelfName) {
-  const card = shelfCards.find(item => item.dataset.shelf === shelfName);
+  const card = [...shelfCards].find(item => item.dataset.shelf === shelfName);
   return card?.querySelector("h3")?.textContent || shelfName;
 }
 
