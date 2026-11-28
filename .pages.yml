@@ -65,6 +65,42 @@ content:
           media: library-pdfs
           extensions:
             - pdf
+      - name: recommended
+        label: Recommended articles and links
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{title}"
+        fields:
+          - name: kind
+            label: Entry type
+            type: select
+            required: true
+            options:
+              values:
+                - Article
+                - Link
+          - name: title
+            label: Article or link title
+            type: string
+            required: true
+          - name: author
+            label: Author
+            type: string
+          - name: date
+            label: Publication date
+            type: date
+          - name: body
+            label: Read here (optional)
+            type: rich-text
+            description: Add article text here if you want it readable inside the library. Leave blank to link out only.
+            options:
+              format: html
+          - name: url
+            label: Original article or link (optional)
+            type: string
+            description: Paste the full https:// link. Readers can open it on the original site.
       - name: summary
         label: Summary (up to 1,000 words)
         type: rich-text
