@@ -1,4 +1,13 @@
 media:
+  - name: library-images
+    label: Resource Images
+    input: images/resources
+    output: /images/resources
+    extensions:
+      - jpg
+      - jpeg
+      - png
+      - webp
   - name: library-pdfs
     label: Library PDFs
     input: pdfs
@@ -21,6 +30,7 @@ content:
           values:
             - Book
             - Articles & Essays
+            - Generation Unlimited Programmes or Opportunities
             - Exercise & Diet
             - Psychology and Mental Models
             - Investing and Financial Literacy
@@ -32,10 +42,24 @@ content:
         label: Author
         type: string
       - name: category
-        label: Category
+        label: Category / Topic (Strategy, Pitch Deck, Regional Context, etc.)
         type: string
+      - name: sourceDate
+        label: Document / Update Date
+        type: date
+      - name: image
+        label: Cover / Resource Image
+        type: image
+        options:
+          media: library-images
+          path: resources
+          extensions:
+            - jpg
+            - jpeg
+            - png
+            - webp
       - name: pdf
-        label: Book / Summary PDF
+        label: Book / Summary / Source PDF
         type: file
         options:
           media: library-pdfs
@@ -44,7 +68,6 @@ content:
       - name: summary
         label: Summary (up to 1,000 words)
         type: rich-text
-        description: Use headings, paragraphs, bulleted lists, and numbered lists. Please keep the summary to 1,000 words or fewer.
+        description: Use headings, paragraphs, bulleted lists, and numbered lists. Please keep the summary to 1,000 words or fewer. For GenU programme sources, include useful strategy, regional, and update context.
         options:
           format: html
-
