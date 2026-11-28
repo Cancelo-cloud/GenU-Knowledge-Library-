@@ -492,19 +492,7 @@ footer strong {
   <section class="resource-view" id="resourceDetail" hidden aria-labelledby="resourceDetailTitle">
     <div class="detail-topbar"><button class="back-button" id="backToShelf" type="button">← Back to Book shelf</button><button class="close-button" id="closeResource" type="button">← Back to library</button></div>
     <article class="resource-detail"><p class="detail-kicker" id="resourceCategory"></p><h1 id="resourceDetailTitle"></h1><p class="detail-byline" id="resourceByline"></p><div class="book-summary" id="resourceDescription"></div></article>
-    <section class="pdf-attachments" aria-labelledby="pdfAttachmentsTitle">
-      <h2 id="pdfAttachmentsTitle">Book PDFs</h2>
-      <p class="pdf-note">Choose the full book PDF, a book summary PDF, or both. The PDF opens here in full screen. These selections stay in this browser session; to publish them with the library, add the PDF files to the project.</p>
-      <div class="pdf-slots">
-        <label class="pdf-slot"><strong>Full book PDF</strong><input id="fullBookPdf" type="file" accept="application/pdf,.pdf"><span id="fullBookStatus">No file attached yet.</span></label>
-        <label class="pdf-slot"><strong>Book summary PDF</strong><input id="summaryPdf" type="file" accept="application/pdf,.pdf"><span id="summaryStatus">No file attached yet.</span></label>
-      </div>
-      <p class="pdf-status" id="pdfStatus" aria-live="polite"></p>
-    </section>
-  </section>
-  <section class="pdf-preview" id="pdfPreview" hidden>
-    <div class="pdf-preview-header"><button class="back-button" id="backToBook" type="button">← Back to book details</button><h2 id="pdfPreviewTitle">PDF Preview</h2><button class="close-button" id="closePdf" type="button">← Back to library</button></div>
-    <iframe id="pdfFrame" title="Selected PDF preview"></iframe>
+    <section class="pdf-attachments" id="resourceDownload" aria-label="Resource download" hidden></section>
   </section>
 </dialog>
 
@@ -518,32 +506,11 @@ footer strong {
 
 <script>
 /*
-  ADD RESOURCES HERE WHEN THE LIBRARY IS POPULATED.
-
-  Example:
-
-  {
-    shelf: "Book",
-    title: "The Psychology of Money",
-    author: "Morgan Housel",
-    description: "An exploration of behaviour and financial decisions.",
-    file: "pdfs/psychology-of-money.pdf"
-  }
-
-  Keep PDF files in a folder named "pdfs" alongside this HTML file.
+  Library items load from data/resources.json. Edit them in Pages CMS.
+  Attach a single Book / Summary PDF and add a formatted summary of up to 1,000 words.
 */
 
-const resources = [{
-  shelf: "Book", type: "book",
-  title: "The 7 Habits of Highly Effective People",
-  author: "Stephen R. Covey",
-  category: "Personal Development / Leadership",
-  description: [
-    "Stephen Covey’s classic is not a collection of quick productivity tricks. It is a framework for developing character and effectiveness from the inside out. Covey begins with personal responsibility: proactive people focus on what they can influence instead of surrendering their energy to circumstances, moods, or other people’s behaviour.",
-    "The first three habits concern private victory. They ask readers to take ownership, define the end before beginning, and organise life around what matters most. The next three concern public victory: thinking in terms of mutual benefit, listening deeply before trying to be understood, and combining different strengths through synergy. The final habit, ‘sharpen the saw,’ is about renewal across body, mind, relationships, and inner life.",
-    "The book is especially valuable for interns because it connects daily behaviour to long-term identity. It shows that effectiveness is not being busy or impressive. It is aligning choices with principles, priorities, and relationships. Covey’s work helps readers become people others can trust: clear in purpose, responsible in action, and capable of working constructively with difference."
-  ]
-}];
+let resources = [];
 
 const shelfCards = document.querySelectorAll(".shelf");
 const searchInput = document.getElementById("librarySearch");
@@ -555,10 +522,7 @@ const shelfView = document.getElementById("shelfView");
 const resourceDetail = document.getElementById("resourceDetail");
 const backToShelf = document.getElementById("backToShelf");
 const closeResource = document.getElementById("closeResource");
-const pdfPreview = document.getElementById("pdfPreview");
-const pdfFrame = document.getElementById("pdfFrame");
-const pdfPreviewTitle = document.getElementById("pdfPreviewTitle");
-let currentPdfUrl = null;
+const resourceDownload = document.getElementById("resourceDownload");
 
 let selectedShelf = null;
 
@@ -566,7 +530,7 @@ function openShelf(shelfName) {
   selectedShelf = shelfName;
   resourceTitle.textContent = shelfName;
   resourcePanel.setAttribute("aria-labelledby", "selectedShelfTitle");
-  shelfView.hidden = false; resourceDetail.hidden = true; pdfPreview.hidden = true;
+  shelfView.hidden = false; resourceDetail.hidden = true;
 
   shelfCards.forEach(card => {
     card.classList.toggle(
@@ -583,13 +547,13 @@ function openShelf(shelfName) {
 function renderResources(shelfName) {
   const shelfResources = resources.filter(resource => resource.shelf === shelfName);
   if (shelfResources.length === 0) {
-    resourceContent.innerHTML = '<div class="empty-state"><div class="symbol">✧</div><h3>This shelf is ready to grow.</h3><p>Learning resources and downloadable PDFs will be added here.</p></div>';
+    resourceContent.innerHTML = '<div class="empty-state"><div class="symbol">✧</div><h3>This shelf is ready to grow.</h3><p>New items you add in the library editor will appear here.</p></div>';
     return;
   }
   resourceContent.innerHTML = '<div class="resource-list">' + shelfResources.map(resource => {
     const index = resources.indexOf(resource);
-    if (resource.type === "book") return '<article class="resource-card"><div><h3>' + escapeHTML(resource.title) + '</h3><p>' + escapeHTML(resource.author) + ' · ' + escapeHTML(resource.category) + '</p><button class="resource-open" type="button" data-resource-index="' + index + '">Open book details →</button></div></article>';
-    return '<article class="resource-card"><div><h3>' + escapeHTML(resource.title) + '</h3><p>' + escapeHTML(resource.author || "") + '</p></div>' + (resource.file ? '<a href="' + escapeHTML(resource.file) + '" download>Download PDF ↓</a>' : '') + '</article>';
+    const byline = [resource.author, resource.category].filter(Boolean).join(' · ');
+    return '<article class="resource-card"><div><h3>' + escapeHTML(resource.title) + '</h3><p>' + escapeHTML(byline) + '</p><button class="resource-open" type="button" data-resource-index="' + index + '">Open resource details →</button></div></article>';
   }).join('') + '</div>';
 }
 
@@ -598,34 +562,17 @@ function openResource(resource) {
   document.getElementById("resourceDetailTitle").textContent = resource.title;
   document.getElementById("resourceCategory").textContent = resource.category || "";
   document.getElementById("resourceByline").textContent = resource.author || "";
-  document.getElementById("resourceDescription").innerHTML = (resource.description || []).map(paragraph => "<p>" + escapeHTML(paragraph) + "</p>").join("");
-  shelfView.hidden = true; pdfPreview.hidden = true; resourceDetail.hidden = false;
+  document.getElementById("resourceDescription").innerHTML = sanitizeRichText(resource.summary || resource.description || "");
+  resourceDownload.hidden = !resource.pdf;
+  resourceDownload.innerHTML = resource.pdf ? '<h2>Book / Summary</h2><a class="resource-open" href="' + escapeHTML(resource.pdf) + '" target="_blank" rel="noopener" download>Download Book / Summary PDF ↓</a>' : "";
+  shelfView.hidden = true; resourceDetail.hidden = false;
   backToShelf.textContent = "← Back to " + resource.shelf + " shelf";
   resourceDetail.scrollTop = 0;
 }
 
-function previewPdf(file, label, statusElement) {
-  if (!file) return;
-  if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
-    document.getElementById("pdfStatus").textContent = "Please choose a PDF file.";
-    return;
-  }
-  if (currentPdfUrl) URL.revokeObjectURL(currentPdfUrl);
-  currentPdfUrl = URL.createObjectURL(file);
-  statusElement.textContent = file.name;
-  document.getElementById("pdfStatus").textContent = "PDF attached for this browser session.";
-  pdfPreviewTitle.textContent = label + ": " + file.name;
-  pdfFrame.src = currentPdfUrl;
-  resourceDetail.hidden = true; pdfPreview.hidden = false;
-}
-
-function returnToBook() {
-  pdfPreview.hidden = true; pdfFrame.removeAttribute("src"); resourceDetail.hidden = false;
-}
-
 function returnToShelf() {
-  if (currentPdfUrl) { URL.revokeObjectURL(currentPdfUrl); currentPdfUrl = null; }
-  pdfFrame.removeAttribute("src"); pdfPreview.hidden = true; resourceDetail.hidden = true; shelfView.hidden = false;
+  resourceDetail.hidden = true;
+  shelfView.hidden = false;
   resourcePanel.setAttribute("aria-labelledby", "selectedShelfTitle");
 }
 
@@ -639,6 +586,20 @@ function escapeHTML(value) {
   })[character]);
 }
 
+function sanitizeRichText(markup) {
+  const template = document.createElement("template");
+  template.innerHTML = String(markup || "");
+  const allowed = new Set(["P", "H2", "H3", "H4", "UL", "OL", "LI", "STRONG", "B", "EM", "I", "BLOCKQUOTE", "BR"]);
+  const clean = node => [...node.childNodes].forEach(child => {
+    if (child.nodeType === Node.ELEMENT_NODE) {
+      if (!allowed.has(child.tagName)) child.replaceWith(...child.childNodes);
+      else { [...child.attributes].forEach(attribute => child.removeAttribute(attribute.name)); clean(child); }
+    } else if (child.nodeType !== Node.TEXT_NODE) child.remove();
+  });
+  clean(template.content);
+  return template.innerHTML;
+}
+
 resourceContent.addEventListener("click", event => {
   const button = event.target.closest("[data-resource-index]");
   if (!button) return;
@@ -647,10 +608,6 @@ resourceContent.addEventListener("click", event => {
 });
 backToShelf.addEventListener("click", returnToShelf);
 closeResource.addEventListener("click", () => resourcePanel.close());
-document.getElementById("backToBook").addEventListener("click", returnToBook);
-document.getElementById("closePdf").addEventListener("click", () => resourcePanel.close());
-document.getElementById("fullBookPdf").addEventListener("change", event => previewPdf(event.target.files[0], "Full book PDF", document.getElementById("fullBookStatus")));
-document.getElementById("summaryPdf").addEventListener("change", event => previewPdf(event.target.files[0], "Book summary PDF", document.getElementById("summaryStatus")));
 
 shelfCards.forEach(card => {
   const image = card.querySelector(".shelf-media img");
@@ -685,7 +642,7 @@ searchInput.addEventListener("input", () => {
       [
         resource.title,
         resource.author,
-        resource.description
+        resource.summary || (Array.isArray(resource.description) ? resource.description.join(" ") : resource.description)
       ].join(" ").toLowerCase().includes(query)
     );
 
@@ -717,13 +674,25 @@ closeButton.addEventListener("click", () => {
   shelfCards.forEach(card => { card.classList.remove("active"); card.setAttribute("aria-expanded", "false"); });
 });
 resourcePanel.addEventListener("close", () => {
-  if (currentPdfUrl) { URL.revokeObjectURL(currentPdfUrl); currentPdfUrl = null; }
-  pdfFrame.removeAttribute("src"); pdfPreview.hidden = true; resourceDetail.hidden = true; shelfView.hidden = false;
+  resourceDetail.hidden = true; shelfView.hidden = false;
   resourcePanel.setAttribute("aria-labelledby", "selectedShelfTitle");
   selectedShelf = null;
   shelfCards.forEach(card => { card.classList.remove("active"); card.setAttribute("aria-expanded", "false"); });
 });
 resourcePanel.addEventListener("click", event => { if (event.target === resourcePanel) resourcePanel.close(); });
+
+async function loadCmsResources() {
+  try {
+    const response = await fetch("data/resources.json", { cache: "no-store" });
+    if (!response.ok) throw new Error("Library content could not be loaded");
+    const data = await response.json();
+    resources = Array.isArray(data) ? data : [];
+    if (selectedShelf) renderResources(selectedShelf);
+  } catch (error) {
+    console.info("CMS resource file is unavailable; shelves will show their empty states.", error);
+  }
+}
+loadCmsResources();
 </script>
 
 </body>
